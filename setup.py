@@ -2,7 +2,7 @@
 from setuptools import setup
 
 setup(name='numerov',
-      version='0.0.1',
+      version='0.0.2',
       description='numerov wf solver',
       author='Adam Deller',
       author_email='a.deller@ucl.ac.uk',
