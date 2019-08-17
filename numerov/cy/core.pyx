@@ -11,8 +11,7 @@ import numpy as np
 @cython.boundscheck(False)
 @cython.wraparound(False)
 cpdef radial_wf(double n, double l, double step=0.005, double rmin=0.65):
-    """ Use the Numerov method to find the wavefunction of | n, l ⟩
-    """
+    """ Use the Numerov method to find R_nl """
     # initialise
     cdef:
         double w1 = -0.5 * n**-2.0
@@ -34,7 +33,7 @@ cpdef radial_wf(double n, double l, double step=0.005, double rmin=0.65):
         long i = 2
         double r = r_sub1
         double drr = exp(-step)**(-l - 1) - 1.0
-    
+
     while r >= rmin:
         ## next step
         r = rmax * exp(-i*step)
@@ -67,9 +66,9 @@ cpdef radial_wf(double n, double l, double step=0.005, double rmin=0.65):
 
 cpdef double radial_integral(double n1, double l1, double n2, double l2,
                              double step=0.005, double rmin=0.65, long p=1):
-    """ Use the Numerov method to calculate 
-        
-        ⟨ n2, l2 | r^p | n1, l1 ⟩
+    """ Use the Numerov method to calculate:
+
+        integrate(R_nl(n1, l1) * r^(2 + p) * R_nl(n2, l2), (r, 0, oo))
     """
     # initialise
     cdef:
@@ -85,22 +84,22 @@ cpdef double radial_integral(double n1, double l1, double n2, double l2,
 
         double r_sub2 = rmax
         double r_sub1 = rmax * exp(-step)
-    
+
         double g1_sub2 = 2.0 * r_sub2**2.0 * (-1.0 / r_sub2 - w11) + w12
         double g1_sub1 = 2.0 * r_sub1**2.0 * (-1.0 / r_sub1 - w11) + w12
         double g2_sub2 = 2.0 * r_sub2**2.0 * (-1.0 / r_sub2 - w21) + w22
         double g2_sub1 = 2.0 * r_sub1**2.0 * (-1.0 / r_sub1 - w21) + w22
-    
+
         double y1_sub2 = 1e-10
         double y1_sub1 = y1_sub2 * (1.0 + step * g1_sub2**0.5)
         double y2_sub2 = 1e-10
-        double y2_sub1 = y2_sub2 * (1.0 + step * g2_sub2**0.5)    
-    
+        double y2_sub1 = y2_sub2 * (1.0 + step * g2_sub2**0.5)
+
         long double norm1 = (y1_sub2**2.0 * r_sub2**2.0
                             + y1_sub1**2.0 * r_sub1**2.0)
         long double norm2 = (y2_sub2**2.0 * r_sub2**2.0
                             + y2_sub1**2.0 * r_sub1**2.0)
-   
+
         double y1 = 1.0
         double y2 = 1.0
         long double integral = (y1_sub2 * y2_sub2 * r_sub2**(2.0 + p)
@@ -110,7 +109,7 @@ cpdef double radial_integral(double n1, double l1, double n2, double l2,
         double r = r_sub1
         double dr1 = exp(-step)**(-l1 - 1) - 1.0
         double dr2 = exp(-step)**(-l2 - 1) - 1.0
-    
+
     # Numerov method
     while r >= rmin:
         r = rmax * exp(-i*step)
@@ -122,7 +121,7 @@ cpdef double radial_integral(double n1, double l1, double n2, double l2,
         y2 = ((y2_sub2 * (g2_sub2 - (12.0 / step_sq))
               + y2_sub1 * (10.0 * g2_sub1 + (24.0 / step_sq)))
               / ((12.0 / step_sq) - g2))
- 
+
         # check for divergence
         if r < r_in1:
             dy1 = abs((y1 - y1_sub1) / y1_sub1)
@@ -133,7 +132,7 @@ cpdef double radial_integral(double n1, double l1, double n2, double l2,
             dy2 = abs((y2 - y2_sub1) / y2_sub1)
             if dy2 > dr2:
                 break
-                
+
         # store vals
         norm1 += y1**2.0 * r**2.0
         norm2 += y2**2.0 * r**2.0
@@ -146,10 +145,11 @@ cpdef double radial_integral(double n1, double l1, double n2, double l2,
         g1_sub1 = g1
         g2_sub2 = g2_sub1
         g2_sub1 = g2
-        
+
         y1_sub2 = y1_sub1
         y1_sub1 = y1
         y2_sub2 = y2_sub1
         y2_sub1 = y2
         i += 1
+
     return integral * (norm1 * norm2)**-0.5
