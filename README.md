@@ -27,7 +27,7 @@ python setup.py install
 
 ### run tests (optional)
 
-Requires cython build.
+Requires cython build, sympy and pytest.
 
 ```
 pytest
