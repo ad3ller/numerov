@@ -8,11 +8,7 @@ from math import exp, ceil, log
 import numpy as np
 
 def radial_wf(n, l, step=0.005, rmin=0.65):
-    """ Use the Numerov method to find the wavefunction of
-        
-        | n, l ⟩
-
-    For states with a quantum defect, swap n for n_eff = n - qd
+    """ Use the Numerov method to find R_nl
     """
     w1 = -0.5 * n**-2.0
     w2 = (l + 0.5)**2.0
@@ -65,9 +61,9 @@ def radial_wf(n, l, step=0.005, rmin=0.65):
     return rvals, yvals
 
 def radial_integral(n1, l1, n2, l2, step=0.005, rmin=0.65, p=1):
-    """ Use the Numerov method to calculate 
+    """ Use the Numerov method to calculate
         
-        ⟨ n2, l2 | r^p | n1, l1 ⟩
+        Integrate[R_(n2, l2) r^(2+p) R_(n1, l1), {r, 0, inf}]
     """
     w11 = -0.5 * n1**-2.0
     w12 = (l1 + 0.5)**2.0
@@ -80,9 +76,8 @@ def radial_integral(n1, l1, n2, l2, step=0.005, rmin=0.65, p=1):
     step_sq = step**2.0
 
     # initialise
-    i = 1
     r_sub2 = rmax
-    r_sub1 = rmax * exp(-i*step)
+    r_sub1 = rmax * exp(-step)
     
     g1_sub2 = 2.0 * r_sub2**2.0 * (-1.0 / r_sub2 - w11) + w12
     g1_sub1 = 2.0 * r_sub1**2.0 * (-1.0 / r_sub1 - w11) + w12
@@ -102,8 +97,10 @@ def radial_integral(n1, l1, n2, l2, step=0.005, rmin=0.65, p=1):
     integral = (y1_sub2 * y2_sub2 * r_sub2**(2.0 + p)
                 + y1_sub1 * y2_sub1 * r_sub1**(2.0 + p))
 
-    i += 1
+    i = 2
     r = r_sub1
+    dr1 = (r**(-l1 - 1) - r_sub1**(-l1 - 1)) / r_sub1**(-l1 - 1)
+    dr2 = (r**(-l2 - 1) - r_sub1**(-l2 - 1)) / r_sub1**(-l2 - 1)
     while r >= rmin:
         # Numerov method
         r = rmax * exp(-i*step)
@@ -119,14 +116,12 @@ def radial_integral(n1, l1, n2, l2, step=0.005, rmin=0.65, p=1):
         # check for divergence
         if r < r_in1:
             dy1 = abs((y1 - y1_sub1) / y1_sub1)
-            dr = (r**(-l1 - 1) - r_sub1**(-l1 - 1)) / r_sub1**(-l1 - 1)
-            if dy1 > dr:
+            if dy1 > dr1:
                 break
 
         if r < r_in2:
             dy2 = abs((y2 - y2_sub1) / y2_sub1)
-            dr = (r**(-l2 - 1) - r_sub1**(-l2 - 1)) / r_sub1**(-l2 - 1)
-            if dy2 > dr:
+            if dy2 > dr2:
                 break
                 
         # store vals

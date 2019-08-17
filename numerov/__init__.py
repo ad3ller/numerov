@@ -1,3 +1,7 @@
 #! python
-from __future__ import print_function, division  # Require Python 2.6 or later
-from .core import *
+try:
+    from .cy.core import radial_wf, radial_integral
+except ImportError:
+    from .core import radial_wf, radial_integral
+except:
+    raise

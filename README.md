@@ -1,9 +1,35 @@
 # Numerov
 
-A basic implementation of the Numerov method to solve the Schrödinger equation for a 1/r potential
+A basic implementation of the Numerov method to solve the Schrï¿½dinger equation for a 1/r potential
 
-## install
+## Install
+
+### download source
+
+```
+git clone "https://github.com/ad3ller/numerov"
+cd ./numerov
+```
+
+### cython build (optional)
+
+The Numerov method can be sped up significantly (x50) with [cython](https://cython.org/).
+
+```
+python setup.py build_ext -i
+
+```
+
+### install
 
 ```
 python setup.py install
+```
+
+### run tests (optional)
+
+Requires cython build.
+
+```
+pytest
 ```
