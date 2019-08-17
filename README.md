@@ -1,6 +1,6 @@
 # Numerov
 
-A basic implementation of the Numerov method to solve the Schr�dinger equation for a 1/r potential
+A basic implementation of the Numerov method to solve the Schrodinger equation for a 1/r potential
 
 ## Install
 
