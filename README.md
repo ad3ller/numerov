@@ -17,7 +17,6 @@ The Numerov method can be sped up significantly (x50) with [cython](https://cyth
 
 ```
 python setup.py build_ext -i
-
 ```
 
 ### install
@@ -33,3 +32,7 @@ Requires cython build.
 ```
 pytest
 ```
+
+## Docs
+
+See notebooks.
