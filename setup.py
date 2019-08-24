@@ -13,7 +13,7 @@ except:
 
 
 setup(name='numerov',
-      version='0.0.4',
+      version='0.0.5',
       description='numerov wf',
       author='Adam Deller',
       author_email='a.deller@ucl.ac.uk',

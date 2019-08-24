@@ -99,8 +99,8 @@ def radial_integral(n1, l1, n2, l2, step=0.005, rmin=0.65, p=1):
 
     i = 2
     r = r_sub1
-    dr1 = (r**(-l1 - 1) - r_sub1**(-l1 - 1)) / r_sub1**(-l1 - 1)
-    dr2 = (r**(-l2 - 1) - r_sub1**(-l2 - 1)) / r_sub1**(-l2 - 1)
+    dr1 = exp(-step)**(-l1 - 1) - 1.0
+    dr2 = exp(-step)**(-l2 - 1) - 1.0
     while r >= rmin:
         # Numerov method
         r = rmax * exp(-i*step)

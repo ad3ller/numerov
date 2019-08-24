@@ -33,3 +33,13 @@ Requires cython build.
 ```
 pytest
 ```
+
+## Docs
+
+```
+>>> import numerov
+>>> numerov.radial_integral(12, 5, 15, 4, step=0.0001)
+4.573187231242028
+```
+
+See notebooks.
