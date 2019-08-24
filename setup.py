@@ -5,7 +5,7 @@ import numpy
 try:
     from Cython.Build import cythonize
     ext_modules = cythonize(Extension("core", ["numerov/cy/core.pyx"], include_dirs=[numpy.get_include()]),
-                            compiler_directives={'embedsignature': True})
+                            compiler_directives={'language_level' : 3, 'embedsignature': True})
 except ImportError:
     ext_modules = []
 except:

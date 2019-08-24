@@ -1,6 +1,6 @@
 # Numerov
 
-A basic implementation of the Numerov method to solve the Schr�dinger equation for a 1/r potential
+A basic implementation of the Numerov method to solve the Schrodinger equation for a 1/r potential
 
 ## Install
 
@@ -13,11 +13,10 @@ cd ./numerov
 
 ### cython build (optional)
 
-The Numerov method can be sped up significantly (x50) with [cython](https://cython.org/).
+The Numerov method can be sped up significantly (x10) with [cython](https://cython.org/). (Requires a C compiler, e.g., gcc or Visual Studio SDK).
 
 ```
 python setup.py build_ext -i
-
 ```
 
 ### install
@@ -28,7 +27,7 @@ python setup.py install
 
 ### run tests (optional)
 
-Requires cython build.
+Requires cython build, sympy and pytest.
 
 ```
 pytest
