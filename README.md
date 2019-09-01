@@ -13,7 +13,7 @@ cd ./numerov
 
 ### cython build (optional)
 
-The Numerov method can be sped up significantly (x10) with [cython](https://cython.org/). (Requires a C compiler, e.g., gcc or Visual Studio SDK).
+The Numerov method can be sped up significantly (x10) with [cython](https://cython.org/).
 
 ```
 python setup.py build_ext -i
